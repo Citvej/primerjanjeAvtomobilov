@@ -1,0 +1,97 @@
+﻿@model IEnumerable<primerjanjeAvtomobilov.Models.Avtomobili>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetAvtomobilPodatki</title>
+</head>
+<body>
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.idAvto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.letnikAvto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nazivAvta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tehnicniPregled)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.prevozeniKilometri)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.barva)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cena)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.vrstaGoriva)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.oblikaAvta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.slikaAvta)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idAvto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.letnikAvto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nazivAvta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tehnicniPregled)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.prevozeniKilometri)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.barva)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cena)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.vrstaGoriva)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.oblikaAvta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.slikaAvta)
+            </td>
+            @*<td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>*@
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
