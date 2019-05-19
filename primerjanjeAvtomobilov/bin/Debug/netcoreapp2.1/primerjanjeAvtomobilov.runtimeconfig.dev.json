@@ -1,8 +1,13 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
+<<<<<<< HEAD
       "C:\\Users\\Vesna\\.dotnet\\store\\|arch|\\|tfm|",
       "C:\\Users\\Vesna\\.nuget\\packages",
+=======
+      "C:\\Users\\MrT\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\MrT\\.nuget\\packages",
+>>>>>>> tadejBranch
       "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
     ]
   }
