@@ -44,7 +44,7 @@ namespace primerjanjeAvtomobilov.Models
                     htmlOglas.Descendants("div").Where(node => node.GetAttributeValue("class", "").Equals("ResultsAdPrice")).FirstOrDefault().InnerText
                 , @"(\d+.\d+)|^[\d+,\d+]").ToString();
 
-                Console.WriteLine(cena);
+                Console.WriteLine("DEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEELA"+cena);
             }
 
 
