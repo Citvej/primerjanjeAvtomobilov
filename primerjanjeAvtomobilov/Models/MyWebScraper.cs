@@ -49,4 +49,5 @@ namespace primerjanjeAvtomobilov.Models
 
 
         }
+    }
 }
