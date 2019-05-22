@@ -12618,23 +12618,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Sumenjak\\.nuget\\packages\\": {},
+    "C:\\Users\\MrT\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sumenjak\\Desktop\\primerjanjeAvtomobilov-nevenBranch\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
+      "projectUniqueName": "D:\\Github_projekt_avtonet\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
       "projectName": "primerjanjeAvtomobilov",
-      "projectPath": "C:\\Users\\Sumenjak\\Desktop\\primerjanjeAvtomobilov-nevenBranch\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
-      "packagesPath": "C:\\Users\\Sumenjak\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sumenjak\\Desktop\\primerjanjeAvtomobilov-nevenBranch\\primerjanjeAvtomobilov\\obj\\",
+      "projectPath": "D:\\Github_projekt_avtonet\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
+      "packagesPath": "C:\\Users\\MrT\\.nuget\\packages\\",
+      "outputPath": "D:\\Github_projekt_avtonet\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Sumenjak\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MrT\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12669,7 +12669,6 @@
             "autoReferenced": true
           },
           "Microsoft.NETCore.App": {
-            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
