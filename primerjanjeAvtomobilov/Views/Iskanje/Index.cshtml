@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+}
+
+<form asp-action="scraper" method="post">
+    <div class="form-group">
+        <label>Url</label>
+        <input type="text" class="form-control" id="url" name="url" placeholder="Enter url">
+    </div>
+    <div class="form-check">
+        <button class="btn btn-info" type="reset">Reset</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
