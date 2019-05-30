@@ -19,23 +19,17 @@ namespace primerjanjeAvtomobilov.Models
 
         public int idAvto { get; set; }
 
-        public int letnikAvto { get; set; }
-
         public string nazivAvta { get; set; }
 
-        public string tehnicniPregled { get; set; }
+        public string prevozeniKm { get; set; }
+		
+		public string menjalnik { get; set; }
+		
+		public string motor { get; set; }
 
-        public int prevozeniKilometri { get; set; }
+        public string cena { get; set; }
 
-        public string barva { get; set; }
-
-        public double cena { get; set; }
-
-        public string vrstaGoriva { get; set; }
-
-        public string oblikaAvta { get; set; }
-
-        public string slikaAvta { get; set; }
+        public string slika { get; set; }
 
         public List<Avtomobili> avtomobiliList = new List<Avtomobili>();
     }
