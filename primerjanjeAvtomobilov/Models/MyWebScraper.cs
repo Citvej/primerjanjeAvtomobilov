@@ -19,7 +19,7 @@ namespace primerjanjeAvtomobilov.Models
 
         public async void scrapeData(string url)
         {
-            string imgUrl, naslov, letnik, prevozeni, motor, menjalnik, cena;
+            string imgUrl, naslov, letnik, prevozeni = "", motor = "", menjalnik = "", cena, menjalnikWebScraperError;
             List<HtmlNode> htmlSeznamOglasov;
             HtmlNode lastnostiAvtomobila;
 
@@ -36,43 +36,132 @@ namespace primerjanjeAvtomobilov.Models
                 imgUrl = htmlOglas.Descendants("img").FirstOrDefault().GetAttributeValue("src", "");
 
                 naslov = htmlOglas.Descendants("span").FirstOrDefault().InnerText;
-
+                string[] asd = new string[3];
                 lastnostiAvtomobila = htmlOglas.Descendants("ul").FirstOrDefault();
                 letnik = lastnostiAvtomobila.ChildNodes[1].InnerText;
-                prevozeni = lastnostiAvtomobila.ChildNodes[2].InnerText;
-                motor = lastnostiAvtomobila.ChildNodes[3].InnerText;
-                menjalnik = lastnostiAvtomobila.ChildNodes[4].InnerText;
+                asd[0] = lastnostiAvtomobila.ChildNodes[2].InnerText;
+                asd[1] = lastnostiAvtomobila.ChildNodes[3].InnerText;
+                asd[2] = lastnostiAvtomobila.ChildNodes[4].InnerText;
+                menjalnikWebScraperError = lastnostiAvtomobila.ChildNodes[5].InnerText;
 
                 cena = Regex.Match(
                     htmlOglas.Descendants("div").Where(node => node.GetAttributeValue("class", "").Equals("ResultsAdPrice")).FirstOrDefault().InnerText
                 , @"(\d+.\d+)|^[\d+,\d+]").ToString();
 
-                prenesiSliko(imgUrl);
-                //Console.WriteLine(naslov);
-                Console.WriteLine("img url: " + imgUrl);
-                //Console.WriteLine(letnik);
-                //Console.WriteLine(prevozeni);
-                //Console.WriteLine(motor);
-                //Console.WriteLine(menjalnik);
-                //Console.WriteLine("Cena: " + cena);
+                //CHECK IF MOTOR OR PREVOZENI OR MENJALNIK ARE SWITCHED
+                for (int i = 0; i < 3; i++)
+                {
+                    if (asd[i].Contains("km"))
+                    {
+                        prevozeni = asd[i];
+                    }
+
+                    if (asd[i].Contains("motor"))
+                    {
+                        motor = asd[i];
+                    }
+
+                    if (asd[i].Contains("menjalnik"))
+                    {
+                        menjalnik = asd[i];
+                    }
+                }
+
+                //CHECK IF ANY IS EMPTY
+                if (string.IsNullOrWhiteSpace(prevozeni))
+                {
+                    prevozeni = "Empty";
+                }
+                if (string.IsNullOrWhiteSpace(menjalnik))
+                {
+                    menjalnik = "Empty";
+                }
+                if (string.IsNullOrWhiteSpace(motor))
+                {
+                    motor = "Empty";
+                }
+
+                if (!string.IsNullOrWhiteSpace(menjalnikWebScraperError) && menjalnikWebScraperError.Contains("menjalnik"))
+                {
+                    menjalnik = menjalnikWebScraperError;
+                }
+
+                // Prevozeni regex
+                prevozeni = prevozeni.Replace(" km", "");
+
+                // Menjalnik regex
+                string checkRocni = menjalnik.Substring(0, 2);
+                if (checkRocni == "ro")
+                {
+                    menjalnik = "ročni" + menjalnik.Substring(5);
+                }
+
+                //Cena regex
+                cena = cena.Replace(".", string.Empty);
+
+                // Motor regex
+                string CCM, regexMotor, KW, KM;
+
+                try
+                {
+                    CCM = Regex.Match(motor, @"\d+").Value;
+
+                    regexMotor = "" + motor.Replace(CCM, "");
+
+                    KW = Regex.Match(regexMotor, @"\d+").Value;
+
+                    regexMotor = "" + regexMotor.Replace(KW, "");
+
+                    KM = Regex.Match(regexMotor, @"\d+").Value;
+
+                    motor = CCM + "|" + KW + "|" + KM;
+                }
+                catch (Exception ex)
+                {
+                    //Console.WriteLine("ERROR: " + ex);
+                }
+
+                // Naslov regex
+                naslov = naslov.Replace("<small>", "");
+                naslov = naslov.Replace("</small>", "");
+                naslov = naslov.Replace("&nbsp", "");
+                naslov = naslov.Replace(";", " ");
+
+
+                //Console.WriteLine("Naslov: " + naslov + "/");
+                //Console.WriteLine("img url: " + imgUrl);
+                //Console.WriteLine("Letnik: " + letnik + "/");
+                //Console.WriteLine("Prevozeni: " + prevozeni + "/");
+                //Console.WriteLine("Motor: " + motor + "/");
+                //Console.WriteLine("Menjalnik: " + menjalnik + "/");
+                //Console.WriteLine("Cena: " + cena + "/");
+
+                //Console.WriteLine("----------------------------------------------");
+
+                //System.Threading.Thread.Sleep(5000);
+
             }
+
+
         }
 
         private static async void GetAvto(string url)
         {
-            string imgUrl = "", naslov = "", letnik = "", prevozeni = "", motor = "", menjalnik = "", cena;
+            string imgUrl, naslov="", letnik="", prevozeni="", motor="", menjalnik="", cena="0";
             List<HtmlNode> imgNodes, carNodes;
             string OglasDataLeft, OglasDataRight, Base64OglasDataLeft;
 
             var httpClient = new HttpClient();
             var html = await httpClient.GetStringAsync(url);
-
+            
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
 
             imgNodes = htmlDocument.DocumentNode.Descendants("div").Where(node => node.GetAttributeValue("id", "").Equals("lightgallery")).ToList();
 
-            foreach (var imgNode in imgNodes) // for zanka za pozneje
+            naslov = htmlDocument.DocumentNode.Descendants("h1").FirstOrDefault().InnerHtml;
+            
+            foreach(var imgNode in imgNodes) // for zanka za pozneje
             {
                 imgUrl = imgNode.Descendants("p").FirstOrDefault().GetAttributeValue("data-src", "");
             }
@@ -99,7 +188,8 @@ namespace primerjanjeAvtomobilov.Models
                 //zakodiram v base64 ker so nekateri znaki v unicode
 
                 Base64OglasDataLeft = Base64Encode(OglasDataLeft);
-
+                //Console.WriteLine(OglasDataLeft + " : " +  Base64OglasDataLeft);
+                
                 switch (Base64OglasDataLeft)
                 {
                     case "TGV0bmlrOg==":
@@ -107,7 +197,7 @@ namespace primerjanjeAvtomobilov.Models
                             OglasDataRight
                             , @"(\d+.\d+)|^[\d+,\d+]").ToString();
                         break;
-                    case "UHJldm/vv71lbmkga206==":
+                    case "UHJldm/vv71lbmkga206":
                         prevozeni = OglasDataRight;
                         break;
                     case "TW90b3I6":
@@ -121,54 +211,66 @@ namespace primerjanjeAvtomobilov.Models
                 }
 
 
-
+                
                 //Console.WriteLine(OglasDataLeft); // + " " + Base64OglasDataLeft);
                 //Console.WriteLine(OglasDataRight);
 
 
             }
-            prenesiSliko(imgUrl);
-            //Console.WriteLine(letnik);
-            //Console.WriteLine(prevozeni);
-            //Console.WriteLine(menjalnik);
-            //Console.WriteLine(motor);
+
+            //Cena regex
+            cena = cena.Replace(".", string.Empty);
 
 
+            // Menjalnik regex
+            string checkRocni = menjalnik.Substring(0, 2);
+            if (checkRocni == "ro")
+            {
+                menjalnik = "ročni" + menjalnik.Substring(5);
+            }
 
+
+            // Motor regex
+            string CCM, regexMotor, KW, KM;
+
+            try
+            {
+                CCM = Regex.Match(motor, @"\d+").Value;
+
+                regexMotor = "" + motor.Replace(CCM, "");
+
+                KW = Regex.Match(regexMotor, @"\d+").Value;
+
+                regexMotor = "" + regexMotor.Replace(KW, "");
+
+                KM = Regex.Match(regexMotor, @"\d+").Value;
+
+                motor = CCM + "|" + KW + "|" + KM;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("ERROR: " + ex);
+            }
+
+            // Naslov regex
+            naslov = naslov.Replace("<small>","");
+            naslov = naslov.Replace("</small>", "");
+            naslov = naslov.Replace("&nbsp", "");
+            naslov = naslov.Replace(";", " ");
+
+            //Console.WriteLine("Naslov: " + naslov + "/");
+            //Console.WriteLine("Letnik: " + letnik + "/");
+            //Console.WriteLine("Prevozeni: " + prevozeni + "/");
+            //Console.WriteLine("Motor: " + motor + "/");
+            //Console.WriteLine(/*"Motor :" + motor +*/ " | CCM: " + CCM + "| KW: " + KW + " | KM: " + KM + "/");
+            //Console.WriteLine("Menjalnik: " + menjalnik + "/");
+            //Console.WriteLine("Cena: " + cena + "/");
         }
+
         public static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
             return System.Convert.ToBase64String(plainTextBytes);
-        }
-
-        static string ComputeSha256Hash(string rawData)
-        {
-            // Create a SHA256   
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // ComputeHash - returns byte array  
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string   
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
-
-        private static void prenesiSliko(string url)
-        {
-            string imgName = ComputeSha256Hash(url);
-            if (url == "../_graphics/0.jpg") url = "https://avto.net/_graphics/0.jpg";
-
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(new Uri(url), @"c:\temp\" + imgName + ".png");
-            }
         }
     }
 }
