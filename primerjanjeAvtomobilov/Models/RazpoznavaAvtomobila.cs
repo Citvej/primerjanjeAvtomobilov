@@ -96,7 +96,6 @@ namespace primerjanjeAvtomobilov.Models {
                 bin[i] = false;
             }
 
-            List<int> histogramTmp;
             List<int> histogram = new List<int>();
 
             int rows = img.Rows;
@@ -109,17 +108,17 @@ namespace primerjanjeAvtomobilov.Models {
             // Image<Bgr, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
             int tmpsize;
             if (img.Width - 2 % cellsize != 0) {
-                tmpsize = img.Width + (img.Width % cellsize); // +2 or not +2?
+                tmpsize = img.Width + cellsize - (img.Width % cellsize); // +2 or not +2?
                 img.Resize(tmpsize, img.Height, Emgu.CV.CvEnum.Inter.Linear);
             }
             if (img.Height - 2 % cellsize != 0) {
-                tmpsize = img.Height + (img.Height % cellsize);
+                tmpsize = img.Height + cellsize - (img.Height % cellsize);
                 img.Resize(img.Width, tmpsize, Emgu.CV.CvEnum.Inter.Linear);
             }
 
             for (int i = 1; i < lenRows; i += cellsize) {
                 for (int j = 1; j < lenCols; j += cellsize) {
-                    histogramTmp = new List<int>(new int[256]);
+                    histogram = new List<int>(new int[256]);
                     int innerLenX = i + cellsize;
                     int innerLenY = j + cellsize;
                     for (int k = i; k < innerLenX; k++) { // rows
@@ -137,15 +136,12 @@ namespace primerjanjeAvtomobilov.Models {
 
                             // bin to int
                             int num = boolToInt(bin);
-                            histogramTmp[num]++;
+                            histogram[num]++;
 
                             // reset bin
                             bin = resetBin(bin);
                         }
                     }
-                    // add histogram to long histogram
-                    histogram = histogram.Concat(histogramTmp).ToList();
-                    histogramTmp = new List<int>(new int[256]); // reset tmp histogram
                 }
             }
             return histogram;
@@ -157,7 +153,6 @@ namespace primerjanjeAvtomobilov.Models {
                 bin[i] = false;
             }
 
-            List<int> histogramTmp;
             List<int> histogram = new List<int>();
 
             int rows = img.Rows;
@@ -170,17 +165,17 @@ namespace primerjanjeAvtomobilov.Models {
             // Image<Bgr, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
             int tmpsize;
             if (img.Width - 2 % cellsize != 0) {
-                tmpsize = img.Width + (img.Width % cellsize); // +2 or not +2?
+                tmpsize = img.Width + cellsize - (img.Width % cellsize); // +2 or not +2?
                 img.Resize(tmpsize, img.Height, Emgu.CV.CvEnum.Inter.Linear);
             }
             if (img.Height - 2 % cellsize != 0) {
-                tmpsize = img.Height + (img.Height % cellsize);
+                tmpsize = img.Height + cellsize - (img.Height % cellsize);
                 img.Resize(img.Width, tmpsize, Emgu.CV.CvEnum.Inter.Linear);
             }
 
             for (int i = 1; i < lenRows; i += cellsize) {
                 for (int j = 1; j < lenCols; j += cellsize) {
-                    histogramTmp = new List<int>(new int[59]);
+                    histogram = new List<int>(new int[59]);
                     int innerLenX = i + cellsize;
                     int innerLenY = j + cellsize;
                     for (int k = i; k < innerLenX; k++) { // rows
@@ -199,16 +194,13 @@ namespace primerjanjeAvtomobilov.Models {
                             // bin to int
                             int num = boolToInt(bin);
                             if (isUniform(num) != -1) {
-                                histogramTmp[isUniform(num)]++;
+                                histogram[isUniform(num)]++;
                             }
 
                             // reset bin
                             bin = resetBin(bin);
                         }
                     }
-                    // add histogram to long histogram
-                    histogram = histogram.Concat(histogramTmp).ToList();
-                    histogramTmp = new List<int>(new int[59]); // reset tmp histogram
                 }
             }
             return histogram;
@@ -220,7 +212,6 @@ namespace primerjanjeAvtomobilov.Models {
                 bin[i] = false;
             }
 
-            List<int> histogramTmp;
             List<int> histogram = new List<int>();
 
             int rows = img.Rows;
@@ -233,17 +224,17 @@ namespace primerjanjeAvtomobilov.Models {
             // Image<Bgr, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
             int tmpsize;
             if (img.Width - 2 % cellsize != 0) {
-                tmpsize = img.Width + (img.Width % cellsize);
+                tmpsize = img.Width + cellsize - (img.Width % cellsize);
                 img.Resize(tmpsize, img.Height, Emgu.CV.CvEnum.Inter.Linear);
             }
             if (img.Height - 2 % cellsize != 0) {
-                tmpsize = img.Height + (img.Height % cellsize);
+                tmpsize = img.Height + cellsize - (img.Height % cellsize);
                 img.Resize(img.Width, tmpsize, Emgu.CV.CvEnum.Inter.Linear);
             }
 
             for (int i = 1; i < lenRows; i += cellsize) {
                 for (int j = 1; j < lenCols; j += cellsize) {
-                    histogramTmp = new List<int>(new int[256]);
+                    histogram = new List<int>(new int[256]);
                     int innerLenX = i + cellsize;
                     int innerLenY = j + cellsize;
                     for (int k = i; k < innerLenX; k++) { // rows
@@ -264,15 +255,12 @@ namespace primerjanjeAvtomobilov.Models {
 
                             // bin to int
                             int num = boolToInt(bin);
-                            histogramTmp[num]++;
+                            histogram[num]++;
 
                             // reset bin
                             bin = resetBin(bin);
                         }
                     }
-                    // add histogram to long histogram
-                    histogram = histogram.Concat(histogramTmp).ToList();
-                    histogramTmp = new List<int>(new int[256]); // reset tmp histogram
                 }
             }
             return histogram;
@@ -342,9 +330,12 @@ namespace primerjanjeAvtomobilov.Models {
             double L2 = Math.Sqrt(sum);
 
             // "vsak element delimo z L2"
-            for (int i = 0; i < bins.Count; i++) {
-                bins[i] = bins[i] / L2;
+            if(L2 > 0) {
+                for (int i = 0; i < bins.Count; i++) {
+                    bins[i] = bins[i] / L2;
+                }
             }
+            
             return bins;
         }
 
@@ -360,11 +351,11 @@ namespace primerjanjeAvtomobilov.Models {
             // Image<Bgr, byte> cpimg = img.Resize(width, height, Emgu.CV.CvEnum.Inter.Linear);
             int tmpsize;
             if (grayImg.Width % cellsize != 0) {
-                tmpsize = grayImg.Width + (grayImg.Width % cellsize);
+                tmpsize = grayImg.Width + cellsize - (grayImg.Width % cellsize);
                 grayImg.Resize(tmpsize, grayImg.Height, Emgu.CV.CvEnum.Inter.Linear);
             }
             if (grayImg.Height % cellsize != 0) {
-                tmpsize = grayImg.Height + (grayImg.Height % cellsize);
+                tmpsize = grayImg.Height + cellsize - (grayImg.Height % cellsize);
                 grayImg.Resize(grayImg.Width, tmpsize, Emgu.CV.CvEnum.Inter.Linear);
             }
 
@@ -419,7 +410,7 @@ namespace primerjanjeAvtomobilov.Models {
             double[] diff = new double[len];
 
             for(int i = 0; i < len; i++) {
-                diff[i] = ((float)Math.Abs(hist1[i] - hist2[i])) / 255; // je max od HOG 255?
+                diff[i] = ((float)Math.Abs(hist1[i] - hist2[i])) / len;
             }
 
             return diff.Sum() / len * 100;
@@ -431,13 +422,27 @@ namespace primerjanjeAvtomobilov.Models {
             double[] diff = new double[len];
 
             for (int i = 0; i < len; i++) {
-                diff[i] = ((float)Math.Abs(hist1[i] - hist2[i])) / 255; // je max od HOG 255?
+                diff[i] = ((float)Math.Abs(hist1[i] - hist2[i])) / len;
             }
 
             return diff.Sum() / len * 100;
         }
 
-        double compare(Image<Bgr, byte> image1, Image<Bgr, byte> image2) {
+        double compare(string filename1, string filename2) {
+            Bitmap bmp1 = new Bitmap(filename1);
+            Bitmap bmp2 = new Bitmap(filename2);
+
+            if (bmp1.Width != bmp2.Width && bmp1.Height != bmp2.Height) {
+                int minwidth = (bmp1.Width > bmp2.Width) ? bmp2.Width : bmp1.Width;
+                int minheight = (bmp1.Height > bmp2.Height) ? bmp2.Height : bmp1.Height;
+
+                Rectangle r = new Rectangle(0, 0, minwidth, minheight);
+                bmp1 = bmp1.Clone(r, bmp1.PixelFormat);
+                bmp2 = bmp2.Clone(r, bmp2.PixelFormat);
+            }
+
+            Image<Bgr, byte> image1 = new Image<Bgr, byte>(bmp1);
+            Image<Bgr, byte> image2 = new Image<Bgr, byte>(bmp2);
 
             List<double> HOG1 = HOG(image1, 8, 2);
             List<double> HOG2 = HOG(image2, 8, 2);
