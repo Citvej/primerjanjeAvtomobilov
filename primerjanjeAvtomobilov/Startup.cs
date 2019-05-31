@@ -56,7 +56,7 @@ namespace primerjanjeAvtomobilov
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Iskanje}/{action=Index}/{id?}");
             });
         }
     }
