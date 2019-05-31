@@ -23,32 +23,40 @@ namespace primerjanjeAvtomobilov.Controllers
         public IActionResult scraper(string url, string enAvto)  
         {  
             var Scaper = new Models.MyWebScraper();
-            
+            var prepoznava = new RazpoznavaAvtomobila();
+            string pathGlavnegaAvta = "";
+            string pathAvtaKiGaPrimerjamo = "";
+            double rezultatPrimerjave;
+
             Scaper.scrapeData(url).Wait();
             //Thread.Sleep(5000);
-            //Scaper.GetAvto();
-            //
-            //TODO: double primerjava = HOG.compare() ... ozadje 
+            Scaper.GetAvto(enAvto).Wait();
+
+            pathGlavnegaAvta = Scaper.avto.slikaAvta;
+            Console.WriteLine("PathGlavnegaAvta" + Scaper.ComputeSha256Hash(pathGlavnegaAvta));
+            pathGlavnegaAvta = "C:/temp/"+Scaper.ComputeSha256Hash(pathGlavnegaAvta)+".png";
+
+
             string oblikaTabele = "<table><thead>" +
                 "<tr><th>Naziv</th><th>Cena</th>" +
-                "<th>Tehnicni pregled</th><th>Prevozeni kilometri</th>" +
-                "<th>Barva</th><th>Vrsta motora</th>" +
-                "<th>Oblika vozila</th></tr>" +
-                "</thead><tbody>"; 
-            foreach(var item in MyWebScraper.listAvti){
+                "<th>Registracija</th>" +
+                "<th>Podobnost avtomobilov</th>" +
+                "<th>Slika</th>" +
+                "</tr></thead><tbody>"; 
+            foreach(var item in Scaper.listAvti){
+                pathAvtaKiGaPrimerjamo = item.slikaAvta;
+                pathAvtaKiGaPrimerjamo = "C:/temp/" + Scaper.ComputeSha256Hash(pathAvtaKiGaPrimerjamo) + ".png";
+                rezultatPrimerjave = prepoznava.compare(pathGlavnegaAvta, pathAvtaKiGaPrimerjamo);
                 oblikaTabele += "<tr><td>" + item.nazivAvta + "</td>";
-                oblikaTabele += "<td>" + item.cena + "</td>";
-                oblikaTabele += "<td>" + item.tehnicniPregled + "</td>";
-                oblikaTabele += "<td>" + item.prevozeniKilometri + "</td>";
-                oblikaTabele += "<td>" + item.barva + "</td>";
-                oblikaTabele += "<td>" + item.vrstaGoriva + "</td>";
-                oblikaTabele += "<td>" + item.oblikaAvta + "</td>";
-                oblikaTabele += "<td>" + item.slikaAvta + "</td>";
+                oblikaTabele += "<td>" + item.cena + " €</td>";
+                oblikaTabele += "<td>" + item.letnikAvto + "</td>";
+                oblikaTabele += "<td>" + rezultatPrimerjave + "</td>";
+                oblikaTabele += "<td><img src=" + item.slikaAvta + " /></td>";
                 oblikaTabele += "</tr>";
             }
             oblikaTabele += "</tbody></table>";
             TempData["oblika"] = oblikaTabele;//MyWebScraper.listAvti;
-            MyWebScraper.listAvti.Clear();
+            Scaper.listAvti.Clear();
             return View("Index");
         } 
     }

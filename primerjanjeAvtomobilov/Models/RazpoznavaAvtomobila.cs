@@ -428,7 +428,7 @@ namespace primerjanjeAvtomobilov.Models {
             return diff.Sum() / len * 100;
         }
 
-        double compare(string filename1, string filename2) {
+        public double compare(string filename1, string filename2) {
             Bitmap bmp1 = new Bitmap(filename1);
             Bitmap bmp2 = new Bitmap(filename2);
 
@@ -460,7 +460,9 @@ namespace primerjanjeAvtomobilov.Models {
             List<int> LBPd2 = LBPd(image2.Convert<Gray, byte>(), 10, 2);
             double diffLBPd = diff(LBPd1, LBPd2);
 
-            return (diffHOG + diffLBP + diffLBPu + diffLBPd)/4;
+            Console.WriteLine("Primerjava: {0} {1} {2} {3}", diffHOG, diffLBP, diffLBPd, diffLBPu);
+
+            return (diffHOG + diffLBP + diffLBPu/10 + diffLBPd)/3;
         }
         #endregion
     }
