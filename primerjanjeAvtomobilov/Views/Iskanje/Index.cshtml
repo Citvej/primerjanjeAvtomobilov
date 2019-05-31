@@ -2,14 +2,19 @@
 @{
     ViewData["Title"] = "View";
 }
-
 <form asp-action="scraper" method="post">
     <div class="form-group">
-        <label>Url</label>
-        <input type="text" class="form-control" id="url" name="url" placeholder="Enter url">
+        <label>Vnos enega avtomobila: </label>
+        <input type="text" class="form-control" id="enAvto" name="enAvto" placeholder="Vnos enega avtomobila">
+    </div>
+    <div class="form-group">
+        <label>Vnos seznama avtomobilov: </label>
+        <input type="text" class="form-control" id="url" name="url" placeholder="Vnos strani avtomobilov">
     </div>
     <div class="form-check">
         <button class="btn btn-info" type="reset">Reset</button>
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
+<br />
+<div id="izpis">@Html.Raw(TempData["oblika"])</div>

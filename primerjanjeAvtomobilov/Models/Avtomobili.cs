@@ -19,28 +19,23 @@ namespace primerjanjeAvtomobilov.Models
 
         public int idAvto { get; set; }
 
+        public string letnikAvto { get; set; }
+
         public string nazivAvta { get; set; }
 
-        public string prevozeniKm { get; set; }
-		
-		public string menjalnik { get; set; }
-		
-		public string motor { get; set; }
+        public string tehnicniPregled { get; set; }
+
+        public string prevozeniKilometri { get; set; }
+
+        public string barva { get; set; }
 
         public string cena { get; set; }
 
-        public string slika { get; set; }
+        public string vrstaGoriva { get; set; }
 
-        public Avtomobili(int idAvto, string nazivAvta, string prevozeniKm, string menjalnik, string motor, string cena, string slika)
-        {
-            this.idAvto = idAvto;
-            this.nazivAvta = nazivAvta;
-            this.prevozeniKm = prevozeniKm;
-            this.menjalnik = menjalnik;
-            this.motor = motor;
-            this.cena = cena;
-            this.slika = slika;
-        }
+        public string oblikaAvta { get; set; }
+
+        public string slikaAvta { get; set; }
 
         public List<Avtomobili> avtomobiliList = new List<Avtomobili>();
     }
