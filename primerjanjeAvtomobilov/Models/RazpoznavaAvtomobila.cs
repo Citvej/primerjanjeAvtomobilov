@@ -405,27 +405,68 @@ namespace primerjanjeAvtomobilov.Models {
 
         #region primerjava
 
-        double diff(List<double> hist1, List<double> hist2) { // hist1 in hist2 OBVEZNO enake velikosti!!!!!
-            int len = hist1.Count;
-            double[] diff = new double[len];
+        // chisquare vrne številke do 1000, correlation vrne med 1 in 0
+        // https://docs.opencv.org/3.4/d8/dc8/tutorial_histogram_comparison.html
+        // https://stackoverflow.com/questions/16357272/compare-2-histograms-with-chi-square
 
-            for(int i = 0; i < len; i++) {
-                diff[i] = ((float)Math.Abs(hist1[i] - hist2[i])) / len;
-            }
-
-            return diff.Sum() / len * 100;
-        }
-
-        // overload za LBP
-        double diff(List<int> hist1, List<int> hist2) { 
+        double diffChisquare(List<double> hist1, List<double> hist2) { // hist1 in hist2 OBVEZNO enake velikosti!!!!!
             int len = hist1.Count;
             double[] diff = new double[len];
 
             for (int i = 0; i < len; i++) {
-                diff[i] = ((float)Math.Abs(hist1[i] - hist2[i])) / len;
+                //diff[i] = (Math.Abs(hist1[i] - hist2[i])) / len;
+                if (Math.Abs(hist1[i]) > Double.Epsilon)
+                    diff[i] += Math.Pow(hist1[i] - hist2[i], 2) / hist1[i];
             }
 
-            return diff.Sum() / len * 100;
+            return diff.Sum();
+        }
+
+        double diffChisquare(List<int> hist1, List<int> hist2) {
+            int len = hist1.Count;
+            double[] diff = new double[len];
+
+            for (int i = 0; i < len; i++) {
+                //diff[i] = (Math.Abs(hist1[i] - hist2[i])) / len; 
+                if (Math.Abs(hist1[i]) > Double.Epsilon)
+                    diff[i] += Math.Pow(hist1[i] - hist2[i], 2) / hist1[i];
+            }
+
+            return diff.Sum();
+        }
+
+        double diffCorrelation(List<double> hist1, List<double> hist2) {
+            int len = hist1.Count;
+            double avgHist1 = hist1.Sum() / len;
+            double avgHist2 = hist2.Sum() / len;
+
+            double upper = 0;
+            double lower1 = 0;
+            double lower2 = 0;
+
+            for (int i = 0; i < len; i++) {
+                upper += (hist1[i] - avgHist1) * (hist2[i] - avgHist2);
+                lower1 += Math.Pow(hist1[i] - avgHist1, 2);
+                lower2 += Math.Pow(hist2[i] - avgHist2, 2);
+            }
+            return upper / Math.Sqrt(lower1 * lower2);
+        }
+
+        double diffCorrelation(List<int> hist1, List<int> hist2) {
+            int len = hist1.Count;
+            double avgHist1 = hist1.Sum() / len;
+            double avgHist2 = hist2.Sum() / len;
+
+            double upper = 0;
+            double lower1 = 0;
+            double lower2 = 0;
+
+            for (int i = 0; i < len; i++) {
+                upper += (hist1[i] - avgHist1) * (hist2[i] - avgHist2);
+                lower1 += Math.Pow(hist1[i] - avgHist1, 2);
+                lower2 += Math.Pow(hist2[i] - avgHist2, 2);
+            }
+            return upper / Math.Sqrt(lower1 * lower2);
         }
 
         public double compare(string filename1, string filename2) {
@@ -444,25 +485,30 @@ namespace primerjanjeAvtomobilov.Models {
             Image<Bgr, byte> image1 = new Image<Bgr, byte>(bmp1);
             Image<Bgr, byte> image2 = new Image<Bgr, byte>(bmp2);
 
-            List<double> HOG1 = HOG(image1, 8, 2);
-            List<double> HOG2 = HOG(image2, 8, 2);
-            double diffHOG = diff(HOG1, HOG2);
+            List<double> HOG1 = HOG(image1, 10, 2);
+            List<double> HOG2 = HOG(image2, 10, 2);
+            //double diffHOG = diffChisquare(HOG1, HOG2);
+            double diffHOG = diffCorrelation(HOG1, HOG2);
 
             List<int> LBP1 = LBP(image1.Convert<Gray, byte>(), 10);
             List<int> LBP2 = LBP(image2.Convert<Gray, byte>(), 10);
-            double diffLBP = diff(LBP1, LBP2);
+            //double diffLBP = diffChisquare(LBP1, LBP2);
+            double diffLBP = diffCorrelation(LBP1, LBP2);
 
             List<int> LBPu1 = LBPu(image1.Convert<Gray, byte>(), 10);
             List<int> LBPu2 = LBPu(image2.Convert<Gray, byte>(), 10);
-            double diffLBPu = diff(LBPu1, LBPu2);
+            //double diffLBPu = diffChisquare(LBPu1, LBPu2);
+            double diffLBPu = diffCorrelation(LBPu1, LBPu2);
 
             List<int> LBPd1 = LBPd(image1.Convert<Gray, byte>(), 10, 2);
             List<int> LBPd2 = LBPd(image2.Convert<Gray, byte>(), 10, 2);
-            double diffLBPd = diff(LBPd1, LBPd2);
+            //double diffLBPd = diffChisquare(LBPd1, LBPd2);
+            double diffLBPd = diffCorrelation(LBPd1, LBPd2);
 
             Console.WriteLine("Primerjava: {0} {1} {2} {3}", diffHOG, diffLBP, diffLBPd, diffLBPu);
 
-            return (diffHOG + diffLBP + diffLBPu/10 + diffLBPd)/3;
+            //return (diffHOG + diffLBP + diffLBPu/10 + diffLBPd)/3;
+            return (diffHOG + diffLBP + diffLBPu + diffLBPd) / 4;
         }
         #endregion
     }
