@@ -1,0 +1,16 @@
+﻿table, th, td {
+    border: 2px solid #add8e6;
+}
+
+td, th {
+    padding: 10px 10px 10px 10px;
+    background: #E0FFFF;
+    table-layout: fixed;
+    width: 80%;
+}
+
+table {
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-collapse: separate;
+}
