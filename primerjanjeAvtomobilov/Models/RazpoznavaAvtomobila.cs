@@ -508,7 +508,7 @@ namespace primerjanjeAvtomobilov.Models {
             Console.WriteLine("Primerjava: {0} {1} {2} {3}", diffHOG, diffLBP, diffLBPd, diffLBPu);
 
             //return (diffHOG + diffLBP + diffLBPu/10 + diffLBPd)/3;
-            return (diffHOG + diffLBP + diffLBPu + diffLBPd) / 4;
+            return (diffHOG + 1-diffLBP + diffLBPu + diffLBPd) / 4;
         }
         #endregion
     }

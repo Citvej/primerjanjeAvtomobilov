@@ -50,7 +50,7 @@ namespace primerjanjeAvtomobilov.Controllers
                 oblikaTabele += "<tr><td>" + item.nazivAvta + "</td>";
                 oblikaTabele += "<td>" + item.cena + " €</td>";
                 oblikaTabele += "<td>" + item.letnikAvto + "</td>";
-                oblikaTabele += "<td>" + rezultatPrimerjave + "</td>";
+                oblikaTabele += "<td>" + (rezultatPrimerjave > 0.5 ? "Da" : "Ne") + "</td>";
                 oblikaTabele += "<td><img src=" + item.slikaAvta + " /></td>";
                 oblikaTabele += "</tr>";
             }
