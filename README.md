@@ -1,2 +1,1 @@
-# primerjanjeAvtomobilov
-Repozitorij za projekt kjer primerjamo avtomobile
+# Primerjanje avtomobilov z avto.net na podlagi prepoznave slik
