@@ -92,7 +92,7 @@ namespace primerjanjeAvtomobilov.Models
             carNodes = htmlDocument.DocumentNode.Descendants("div").Where(node => node.GetAttributeValue("class", "").Equals("OglasData")).ToList();
 
             cena = Regex.Match(
-                htmlDocument.DocumentNode.Descendants("div").Where(node => node.GetAttributeValue("class", "").Equals("OglasPrice")).First().InnerText
+                htmlDocument.DocumentNode.Descendants("div").Where(node => node.GetAttributeValue("class", "").Equals("CenaVOglasu OglasPrice")).First().InnerText
                 , @"(\d+.\d+)|^[\d+,\d+]").ToString();
 
             foreach (var carNode in carNodes)

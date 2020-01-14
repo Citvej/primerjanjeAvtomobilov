@@ -28,7 +28,7 @@ namespace primerjanjeAvtomobilov.Controllers
             string pathAvtaKiGaPrimerjamo = "";
             double rezultatPrimerjave;
 
-            Scaper.scrapeData(url).Wait();
+            //Scaper.scrapeData(url).Wait();
             //Thread.Sleep(5000);
             Scaper.GetAvto(enAvto).Wait();
 

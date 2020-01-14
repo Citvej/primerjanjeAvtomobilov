@@ -12712,23 +12712,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Vesna\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Neven\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Vesna\\Documents\\GitHub\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
+      "projectUniqueName": "C:\\Users\\Neven\\Documents\\GitHub\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
       "projectName": "primerjanjeAvtomobilov",
-      "projectPath": "D:\\Vesna\\Documents\\GitHub\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
-      "packagesPath": "C:\\Users\\Vesna\\.nuget\\packages\\",
-      "outputPath": "D:\\Vesna\\Documents\\GitHub\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\obj\\",
+      "projectPath": "C:\\Users\\Neven\\Documents\\GitHub\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov.csproj",
+      "packagesPath": "C:\\Users\\Neven\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Neven\\Documents\\GitHub\\primerjanjeAvtomobilov\\primerjanjeAvtomobilov\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Vesna\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Neven\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12763,6 +12759,7 @@
             "autoReferenced": true
           },
           "Microsoft.NETCore.App": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.1.0, )",
             "autoReferenced": true
@@ -12777,10 +12774,16 @@
           }
         },
         "imports": [
-          "net461"
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
         ],
         "assetTargetFallback": true,
-        "warn": true
+        "warn": true,
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
